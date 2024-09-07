@@ -6,7 +6,7 @@
 }:
 {
   imports = [
-    ./latest-zfs-kernel.nix
+    # ./latest-zfs-kernel.nix
     ./nix-settings.nix
   ];
   # more descriptive hostname than just "nixos"
@@ -16,10 +16,10 @@
   system.stateVersion = config.system.nixos.version;
 
   # Enable bcachefs support
-  boot.supportedFilesystems.bcachefs = lib.mkDefault true;
+  # boot.supportedFilesystems.bcachefs = lib.mkDefault true;
 
   # use latest kernel we can support to get more hardware support
-  boot.zfs.package = pkgs.zfsUnstable;
+  # boot.zfs.package = pkgs.zfsUnstable;
 
   documentation.enable = false;
   documentation.man.man-db.enable = false;
