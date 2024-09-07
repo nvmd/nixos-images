@@ -49,10 +49,36 @@
         });
       nixosModules = {
         kexec-installer = ./nix/kexec-installer/module.nix;
+
         noninteractive = ./nix/noninteractive.nix;
+
         # TODO: also add a test here once we have https://github.com/NixOS/nixpkgs/pull/228346 merged
         netboot-installer = ./nix/netboot-installer/module.nix;
-        image-installer = ./nix/image-installer/module.nix;
+
+        image-installer = ({ modulesPath, ... }: {
+          imports = [
+            (modulesPath + "/installer/cd-dvd/installation-cd-base.nix")
+            ./nix/image-installer/module.nix
+          ];
+          # No one got time for xz compression.
+          isoImage.squashfsCompression = "zstd";
+        } // (if lib.versionAtLeast lib.version "25.03pre" then {
+          image.baseName = lib.mkForce "nixos-installer-${pkgs.system}";
+        } else {
+          isoImage.isoName = lib.mkForce "nixos-installer-${pkgs.system}.iso";
+        }));
+
+        sdimage-installer = ({ modulesPath, ... }: {
+          imports = [
+            (modulesPath + "/installer/sd-card/sd-image-aarch64-installer.nix")
+            ./nix/image-installer/module.nix
+          ];
+        } // (if lib.versionAtLeast lib.version "25.03pre" then {
+          image.baseName = lib.mkForce "nixos-installer-${pkgs.system}";
+        } else {
+          sdImage.imageName = lib.mkForce "nixos-installer-${pkgs.system}.img";
+        }));
+
       };
       checks =
         let
