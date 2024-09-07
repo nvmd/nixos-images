@@ -38,7 +38,7 @@ let
 in
 {
   imports = [
-    (modulesPath + "/installer/cd-dvd/installation-cd-base.nix")
+    # (modulesPath + "/installer/cd-dvd/installation-cd-base.nix")
     ../installer.nix
     ../noveau-workaround.nix
     ./hidden-ssh-announcement.nix
@@ -119,7 +119,7 @@ in
     fi
   '';
 
-  # No one got time for xz compression.
-  isoImage.squashfsCompression = "zstd";
-  isoImage.isoName = lib.mkForce "nixos-installer-${pkgs.system}.iso";
+  # # No one got time for xz compression.
+  # isoImage.squashfsCompression = "zstd";
+  # isoImage.isoName = lib.mkForce "nixos-installer-${pkgs.system}.iso";
 }
